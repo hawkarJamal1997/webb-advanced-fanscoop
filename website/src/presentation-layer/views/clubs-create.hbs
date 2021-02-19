@@ -1,0 +1,27 @@
+<div class="content">
+    <h2>Create new Club</h2>
+    <p>Create a new Club.</p>
+    {{#if errors.length}}
+    <p>Fix the errors</p>
+    <ul>
+        {{#each errors}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+    {{/if}}
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-7-desktop is-10-mobile is-5-widescreen">
+                <form action="/clubs/create" method="POST" class="box">
+                    <div class="field">
+                        <label class="label">name:</label>
+                        <input type="text" class="input" name="name">
+                    </div>
+                    <div>
+                        <input class="button is-success" type="submit" value="Create club">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

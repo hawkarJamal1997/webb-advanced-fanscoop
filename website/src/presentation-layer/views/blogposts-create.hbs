@@ -1,0 +1,32 @@
+<div class="content">
+    <h2>Create new blogpost</h2>
+    <p>Create a new blogpost using the form below.</p>
+    {{#if errors.length}}
+    <p>Fix the errors</p>
+    <ul>
+        {{#each errors}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+    {{/if}}
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-7-desktop is-10-mobile is-5-widescreen">
+                <form action="/blogposts/create" method="POST" class="box">
+                    <div class="field">
+                        <label class="label">Title:</label>
+                        <input type="text" class="input" name="title">
+                    </div>
+                    <div class="field">
+                        <label class="label">Content:</label>
+                        <textarea class="textarea" name="content" rows="5"></textarea>
+                    </div>
+                    <input type="hidden" name="club" value="{{club}}"
+                    <div>
+                        <input class="button is-success" type="submit" value="Create blogpost">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
