@@ -1,24 +1,12 @@
 const express = require('express')
 const path = require('path')
 const jwt = require('jsonwebtoken')
-const { privateKey } = require('../../business-logic-layer/commons')
-const errorMessages = require('../../business-logic-layer/error-messages')
+const { privateKey } = require('../../../business-logic-layer/commons')
+const errorMessages = require('../../../business-logic-layer/error-messages')
 
 module.exports = function({accountManager}){
 
 	const router = express.Router()
-
-	router.get("/", function(request, response){
-		console.log("hej");
-		accountManager.getAllAccounts(function(errorCodes, accounts) {
-			const model = {
-				errors: errorCodes,
-				accounts: accounts,
-				isLoggedIn: request.session.account
-			}
-			response.status(200).json(model)
-		})
-	})
 
 	router.post("/sign-up", function(request, response){
 

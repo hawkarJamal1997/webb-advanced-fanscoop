@@ -1,11 +1,12 @@
 FROM node:15.6
 
-WORKDIR /web-application
+WORKDIR /the-web-application
 
 COPY package*.json ./
 
+RUN npm install -g nodemon
 RUN npm install
 
-COPY src src
+COPY src ./src
 
 CMD npm run start

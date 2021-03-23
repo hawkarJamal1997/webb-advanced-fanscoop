@@ -6,7 +6,7 @@ const redisClient = redis.createClient({host:'redis'})
 const redisStore = require('connect-redis')(expressSession)
 const path = require('path')
 
-module.exports = function({variousRouter, accountRouter, accountRouterApi, clubRouter, postRouter, postRouterApi}){
+module.exports = function({variousRouter, accountRouter, accountRouterApi, clubRouter, clubRouterApi, postRouter, postRouterApi}){
 
 	const app = express()
 
@@ -53,10 +53,11 @@ module.exports = function({variousRouter, accountRouter, accountRouterApi, clubR
 	// Attach all the routers.
 	app.use("/", variousRouter)
 	app.use("/accounts", accountRouter)
-	app.use("/Apiaccounts", accountRouterApi)
+	app.use("/api/accounts", accountRouterApi)
 	app.use("/clubs", clubRouter)
+	app.use("/api/clubs", clubRouterApi)
 	app.use("/posts", postRouter)
-	app.use("/apiposts", postRouterApi)
+	app.use("/api/posts", postRouterApi)
 
 	return app
 

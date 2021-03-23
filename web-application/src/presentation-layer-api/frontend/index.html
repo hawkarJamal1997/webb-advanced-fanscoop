@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="/css/layout.css">
 	<title>My Site</title>
 	
 	<style>
@@ -30,14 +32,12 @@
 		
 	</style>
 	
+	<script src="Http-helper.js"></script>
 	<script>
-		
 		/*** TODO: Writing all code in a single file like this is not good. ***/
 		// Especially, writing a library/SDK to only handle the communication with
 		// the backend is a very good idea.
-		
-		const BACKEND_URI = "http://localhost:8000/"
-		
+				
 		// TODO: Want to remember the access token across page reloads?
 		// You could for example store it in local storage, although that
 		// would be really bad if your website contains a XSS vulnerability.
@@ -194,20 +194,24 @@
 				
 				case "/":
 					newPageId = "home-page"
-				break
+					break
 				case "/about":
 					newPageId = "about-page"
-				break
+					break
 				case "/login":
 					newPageId = "login-page"
-				break
-				case "/all-posts":
-					newPageId = "all-posts-page"
+					break
+				case "/clubs":
+					newPageId = "clubs-page"
+					loadAllClubs()
+					break
+				case "/posts":
+					newPageId = "posts-page"
 					loadAllPosts()
-				break
+					break
 				case "/create-post":
 					newPageId = "create-post-page"
-				break
+					break
 				default:
 					
 					if(uri.startsWith("/posts/")){
@@ -227,6 +231,81 @@
 		function hideCurrentPage(){
 			document.querySelector(".current-page").classList.remove("current-page")
 		}
+
+		async function loadAllClubs(){
+
+			const page = document.getElementById("clubs-page")
+			page.innerText = ""
+			
+			const h1 = document.createElement("h1")
+			h1.innerText = "All Clubs"
+			page.appendChild(h1)
+			
+			// TODO: Investigate how the code works when the backend is down.
+			try {
+				const data = await Get("api/clubs")
+				if(data.errors) {
+					for(const error of errors) {
+						const p = document.createElement("p")
+						p.innerText = error
+						page.appendChild(p)
+					}
+					return;
+				}
+
+				const clubs = data.clubs
+					
+				const ul = document.createElement("ul")
+				
+				for(const club of clubs){
+					const li = document.createElement("li")
+					const a = document.createElement("a")
+					a.innerText = club.name
+					a.setAttribute("href", "/club/"+club.id)
+					li.appendChild(a)
+					ul.appendChild(li)
+				}
+					
+				page.appendChild(ul)
+			} catch (error) {
+				console.error("error ", error)
+			}
+			/*
+			await fetch(BACKEND_URI+"api/clubs")
+			.then((res) => res.json())
+			.then( (data) => {
+				console.log("data: ", data)
+			})
+			.catch( (error) => {
+				console.error("error: ", error)
+			})		
+			switch(response.status){
+				
+				case 200:
+					
+					const clubs = await response.then((response) => response.json()).then((data) => )
+					
+					const ul = document.createElement("ul")
+					
+					for(const club of clubs){
+						const li = document.createElement("li")
+						const a = document.createElement("a")
+						a.innerText = club.name
+						a.setAttribute("href", "/club/"+club.id)
+						li.appendChild(a)
+						ul.appendChild(li)
+					}
+					
+					page.appendChild(ul)
+					
+				break
+				
+				case 500:
+				default:
+					// TODO
+				
+			}*/
+		}
 		
 		async function loadAllPosts(){
 			
@@ -238,7 +317,7 @@
 			page.appendChild(h1)
 			
 			// TODO: Investigate how the code works when the backend is down.
-			const response = await fetch(BACKEND_URI+"milan")
+			const response = await fetch(BACKEND_URI+"postsApi/milan")
 			
 			switch(response.status){
 				
@@ -310,19 +389,35 @@
 </head>
 <body class="is-logged-out">
 	
-	<header>
-		My Site
-	</header>
-	
-	<nav>
-		<ul>
-			<li><a href="/">Home</a></li>
-			<li><a href="/about">About</a></li>
-			<li><a href="/all-posts">posts</a></li>
-			<li class="if-is-logged-in"><a href="/create-post">Create post</a></li>
-			<li class="if-is-logged-out"><a href="/login">Login</a></li>
-		</ul>
-	</nav>
+	<nav class="navbar is-info" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/"><strong>FanScoop</strong></a>
+            <a role="button" class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <a href="/accounts" class="navbar-item">Accounts</a>
+                <a href="/clubs" class="navbar-item">Clubs</a>
+                <a href="/about" class="navbar-item">About</a>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                            <form action="/accounts/logout" method="POST">
+                                <input class="button is-success" type="submit" value="Logout">
+                            </form>
+                        <a href="/accounts/sign-up" class="button is-dark">Sign up</a>
+                        <a href="/accounts/sign-in" class="button is-light">Sign in</a>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 	
 	<main>
 		
@@ -333,6 +428,12 @@
 		</div>
 		
 		<div class="page" id="about-page">
+			<h1>About</h1>
+			<p>The about page...</p>
+			<p>Read about <a href="http://nintendo.se">Nintendo</a>.</p>
+		</div>
+
+		<div class="page" id="clubs-page">
 			<h1>About</h1>
 			<p>The about page...</p>
 			<p>Read about <a href="http://nintendo.se">Nintendo</a>.</p>
