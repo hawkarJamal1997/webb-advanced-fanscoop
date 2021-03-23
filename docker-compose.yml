@@ -1,17 +1,32 @@
 version: "3.8"
 services:
-  website:
-    build: ./website
-    ports:
-     - 8000:8080
+  nginx:
+    image: nginx
+    depends_on: 
+     - web-application
     volumes:
-     - ./website/src:/the-website/src/
+      - ./web-application/src/presentation-layer-api/frontend/:/etc/nginx/html
+    ports:
+      - 8000:80
+  web-application:
+    build: ./web-application
+    ports:
+     - 80:80
+    volumes:
+     - ./web-application/src:/the-web-application/src/
     depends_on:
+     - redis
      - db
   db:
     build: ./db
     ports:
       - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: milan123
-      MYSQL_DATABASE: fanscoopDb
+      MYSQL_ROOT_PASSWORD: theRootPassword
+      MYSQL_DATABASE: fanscoopDatabase
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+  
+  

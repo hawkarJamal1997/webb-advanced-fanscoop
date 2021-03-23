@@ -1,0 +1,26 @@
+<div class="content">
+	<h1>Post</h1>
+	{{#if errors.length}}
+	<p>Oh no, something went wrong:</p>
+	<ul>
+		{{#each errors}}
+		<li>{{this}}</li>
+		{{/each}}
+	</ul>
+	{{else}}
+
+	{{#if post}}
+		<div class="card">
+			<div class="card-content">
+				<p class="title">{{post.title}}</p>
+				<p class="subtitle">{{post.content}}</p>
+				<p class="subtitle">{{post.club}}</p>
+				<p class="subtitle">{{post.userOfPost}}</p>
+			</div>
+		</div>
+	{{else}}
+	<p>No, that post doesn't exist.</p>
+	{{/if}}
+
+	{{/if}}
+</div>
