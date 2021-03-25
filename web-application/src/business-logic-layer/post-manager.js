@@ -16,7 +16,6 @@ module.exports = function({postRepository}){
 			callback(errors, null)
 			return
 		}
-		console.log(post);
 		postRepository.createPost(post, callback)
 	}
 	

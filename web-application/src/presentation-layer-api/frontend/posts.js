@@ -1,12 +1,133 @@
-document.addEventListener("DOMContentLoaded",function(event){
+async function loadAllPosts(clubName) {
+  
+    const club = await Get(`api/posts/${clubName}`)
+    console.log(club)
+    if (club.errors) {
+        HandleErrors(errors, page)
+        return;
+    }
+
+    const page = document.getElementById("club-posts-page")
+    page.innerText = ""
+
+    const h1 = document.getElementsByTagName("h1")[2]
+    h1.innerText = `All posts of ${clubName}`
+    page.appendChild(h1)
+
+    const createPost = document.createElement('a')
+    createPost.href = `/create-post/${clubName}`
+    createPost.innerText = "Create post"
+
+    page.appendChild(createPost)
+
+    createPost.addEventListener('click', function(e){
+        e.preventDefault()
+        showPage(`/create-post/${clubName}`)
+    })
+
+    for (const post of club.posts) {
+
+        const card = document.createElement('div')
+        card.classList.add('card')
+
+        const cardContent = document.createElement('div')
+        cardContent.classList.add('cardContent')
+
+        const title = document.createElement('p')
+        title.classList.add('title')
+        title.innerText = post.title
+
+        const subtitle = document.createElement('p')
+        subtitle.classList.add('subtitle')
+        subtitle.innerText = post.content
+
+        card.addEventListener('click', function(e){
+            e.preventDefault()
+            showPage(`/posts/${post.club}/${post.title}`)
+        })
+
+        cardContent.appendChild(title)
+        cardContent.appendChild(subtitle)
+        card.appendChild(cardContent)
+        page.appendChild(card)
+    }
+
+}
+
+
+/*async function loadPostPage(clubName, postTitle) {
+
+    const page = document.getElementById("post-page")
+    page.innerText = ""
+
+    const h1 = document.createElement("h1")
+    h1.innerText = "post"
+    page.appendChild(h1)
+
+    console.log("here")
+
+    const post = await Get(`api/posts/${clubName}/${postTitle}`)
+
+    if (post.errors) {
+        HandleErrors(errors, page)
+        return;
+    } else {
+        createCard(post, page)
+    }
+}*/
+
+async function createPost(clubName){
+
+    document.getElementById("create-post-form").addEventListener("submit", async function (event) {
+
+        event.preventDefault()
+    
+        const title = document.getElementById("title").value.checkValidity()
+        const content = document.getElementById("content").value.checkValidity()
+    
+        const post = {
+            title,
+            content,
+            clubName
+        }
+
+        try {
+
+            const response = await Post(`api/posts/${clubName}`, post, accessToken)
+
+            if (response.errors) {
+                HandleErrors(response.errors, page)
+                return;
+            }else {
+    
+                const createdpost = await response.json()
+                console.log(createdpost)
+    
+                const uri = `/posts/${createdpost.clubName}`
+    
+                // TODO: This is the same code that runs when clicking on a link. Function instead of code duplication?
+                history.pushState({}, "", uri)
+                hideCurrentPage()
+                showPage(uri)
+            }
+        } catch (error) {
+            console.error("error: ", error)
+        }
+    })
+}
+
+
+
+
+document.addEventListener("DOMContentLoaded", function (event) {
     event.preventDefault()
 
     /*************CREATE ONE POST***********/
-    createPost = function(description){
-        if(!localStorage.getItem("accessToken"))
+    createPost = function (description) {
+        if (!localStorage.getItem("accessToken"))
             return
-        
-        fetch("/apiposts/",{
+
+        fetch("/apiposts/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -15,108 +136,108 @@ document.addEventListener("DOMContentLoaded",function(event){
             body: JSON.stringify({
                 postDescription: encodeURI(description.value)
             })
-        }).then(function(response){
+        }).then(function (response) {
             return response.json()
-        }).then(function(body){
-            if(body.errors.lenght > 0){
+        }).then(function (body) {
+            if (body.errors.lenght > 0) {
                 document.getElementById("homeErrorField").innerText = body.errors[0]
-            }else{
+            } else {
                 updateHome()
             }
         })
     }
 
     /*************READ ONE POST***********/
-    generatePost = function(post,place){
+    generatePost = function (post, place) {
         const parentDiv = document.createElement("div")
-        parentDiv.classList.add("container","postContainer")
+        parentDiv.classList.add("container", "postContainer")
 
-            const childDiv = document.createElement("div")
-            childDiv.classList.add("media","has-background-light")
-            parentDiv.appendChild(childDiv)
+        const childDiv = document.createElement("div")
+        childDiv.classList.add("media", "has-background-light")
+        parentDiv.appendChild(childDiv)
 
-                const figure = document.createElement("figure")
-                figure.classList.add("media-left","image","is-64x64")
-                childDiv.appendChild(figure)
+        const figure = document.createElement("figure")
+        figure.classList.add("media-left", "image", "is-64x64")
+        childDiv.appendChild(figure)
 
-                    const img = document.createElement("img")
-                    img.src = "/images/" + post.profileImagePath
-                    img.setAttribute("style","width:64px;height:64px;")
-                    figure.appendChild(img)
+        const img = document.createElement("img")
+        img.src = "/images/" + post.profileImagePath
+        img.setAttribute("style", "width:64px;height:64px;")
+        figure.appendChild(img)
 
-                const grandChildDiv = document.createElement("div")
-                grandChildDiv.classList.add("content")
-                childDiv.appendChild(grandChildDiv)
+        const grandChildDiv = document.createElement("div")
+        grandChildDiv.classList.add("content")
+        childDiv.appendChild(grandChildDiv)
 
-                    const usernameStrong = document.createElement("strong")
-                    usernameStrong.innerText = post.username
-                    usernameStrong.onclick = function(){
-                        updateProfile(usernameStrong.innerText)
-                        document.getElementById("index").classList.add("hidden")
-                        document.getElementById("following").classList.add("hidden")
-                        document.getElementById("profile").classList.remove("hidden")
-                    }
-                    grandChildDiv.appendChild(usernameStrong)
+        const usernameStrong = document.createElement("strong")
+        usernameStrong.innerText = post.username
+        usernameStrong.onclick = function () {
+            updateProfile(usernameStrong.innerText)
+            document.getElementById("index").classList.add("hidden")
+            document.getElementById("following").classList.add("hidden")
+            document.getElementById("profile").classList.remove("hidden")
+        }
+        grandChildDiv.appendChild(usernameStrong)
 
-                    const description = document.createElement("p")
-                    description.classList.add("postDescription")
-                    description.innerText = post.postDescription
-                    grandChildDiv.appendChild(description)
+        const description = document.createElement("p")
+        description.classList.add("postDescription")
+        description.innerText = post.postDescription
+        grandChildDiv.appendChild(description)
 
-                const grandChildNav = document.createElement("nav")
-                grandChildNav.classList.add("level")
-                childDiv.appendChild(grandChildNav)
+        const grandChildNav = document.createElement("nav")
+        grandChildNav.classList.add("level")
+        childDiv.appendChild(grandChildNav)
 
-                    const grandChildsChildDiv = document.createElement("div")
-                    grandChildsChildDiv.classList.add("level-left")
-                    grandChildDiv.appendChild(grandChildsChildDiv)
+        const grandChildsChildDiv = document.createElement("div")
+        grandChildsChildDiv.classList.add("level-left")
+        grandChildDiv.appendChild(grandChildsChildDiv)
 
-                        if(post.isOwner){
+        if (post.isOwner) {
 
-                            const updateButton = document.createElement("button")
-                            updateButton.classList.add("button","is-outlined","is-info")
-                            updateButton.innerText = "Update"
-                            updateButton.onclick = function(){
-                                updateButton.disabled = true
-                                updatePost(post,grandChildsChildDiv,description,updateButton)
-                              
-                            }
-                            grandChildsChildDiv.appendChild(updateButton)
+            const updateButton = document.createElement("button")
+            updateButton.classList.add("button", "is-outlined", "is-info")
+            updateButton.innerText = "Update"
+            updateButton.onclick = function () {
+                updateButton.disabled = true
+                updatePost(post, grandChildsChildDiv, description, updateButton)
 
-                            const deleteButton = document.createElement("button")
-                            deleteButton.classList.add("button","is-danger","is-outlined")
-                            deleteButton.innerText = "Delete"
-                            deleteButton.onclick = function(){deletePost(post,parentDiv,place)}
-                            grandChildsChildDiv.appendChild(deleteButton)
+            }
+            grandChildsChildDiv.appendChild(updateButton)
 
-                        }
-                        
+            const deleteButton = document.createElement("button")
+            deleteButton.classList.add("button", "is-danger", "is-outlined")
+            deleteButton.innerText = "Delete"
+            deleteButton.onclick = function () { deletePost(post, parentDiv, place) }
+            grandChildsChildDiv.appendChild(deleteButton)
+
+        }
+
         place.appendChild(parentDiv)
     }
 
-    
+
     /*************UPDATE ONE POST***********/
-    updatePost = function(currentPost,div,descriptionField,updateButton){
+    updatePost = function (currentPost, div, descriptionField, updateButton) {
         const textArea = document.createElement("input")
-        textArea.setAttribute("type","text")
+        textArea.setAttribute("type", "text")
         textArea.value = currentPost.postDescription
 
         const saveUpdate = document.createElement("button")
         saveUpdate.innerText = "save"
-        saveUpdate.setAttribute("style","float:none")
+        saveUpdate.setAttribute("style", "float:none")
         const breakPoint = document.createElement("br")
-        
+
         const cancelUpdate = document.createElement("button")
         cancelUpdate.innerText = "cancel"
-        cancelUpdate.setAttribute("style","float:none")
+        cancelUpdate.setAttribute("style", "float:none")
 
         div.appendChild(textArea)
         div.appendChild(saveUpdate)
         div.appendChild(cancelUpdate)
 
-        saveUpdate.addEventListener("click",function(){
+        saveUpdate.addEventListener("click", function () {
             postDescription = textArea.value
-            fetch("/postApi/post",{
+            fetch("/postApi/post", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -125,32 +246,32 @@ document.addEventListener("DOMContentLoaded",function(event){
                 body: JSON.stringify({
                     postId: encodeURI(currentPost.id),
                     ownerId: encodeURI(currentPost.ownerId),
-                    postDescription:encodeURI(textArea.value)
+                    postDescription: encodeURI(textArea.value)
                 })
-            }).then(function(response){
+            }).then(function (response) {
                 return response.json()
-            }).then(function(body){
-                
-                if(body.errors.length < 1){
+            }).then(function (body) {
+
+                if (body.errors.length < 1) {
                     descriptionField.innerText = textArea.value
                     currentPost.postDescription = textArea.value
                     updateButton.disabled = false
                     cancelUpdate.click()
-                }else{
-                    for(const error of body.errors){
+                } else {
+                    for (const error of body.errors) {
                         const pError = document.createElement("p")
                         pError.innerText = error
-                        pError.setAttribute("style","color:red;")
+                        pError.setAttribute("style", "color:red;")
                         cancelUpdate.appendChild(pError)
                     }
                 }
-            }).catch(function(error){
+            }).catch(function (error) {
                 console.log(error)
             })
         })
-        
-        cancelUpdate.addEventListener("click",function(){
-            for(let i = 0; i < 3 ; i++){
+
+        cancelUpdate.addEventListener("click", function () {
+            for (let i = 0; i < 3; i++) {
                 div.removeChild(div.lastChild)
             }
             updateButton.disabled = false
@@ -158,11 +279,11 @@ document.addEventListener("DOMContentLoaded",function(event){
     }
 
     /*************DELETE ONE POST***********/
-    deletePost = function(post,parentDiv,place){
+    deletePost = function (post, parentDiv, place) {
         console.log(post)
-        fetch("/postApi/post" ,{
+        fetch("/postApi/post", {
             method: "DELETE",
-            headers:{
+            headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem("accessToken")
             },
@@ -170,15 +291,15 @@ document.addEventListener("DOMContentLoaded",function(event){
                 postId: encodeURI(post.id),
                 ownerId: encodeURI(post.ownerId)
             })
-        }).then(function(response){
+        }).then(function (response) {
             return response.json()
-        }).then(function(body){
-            if(body.errors.length < 1){
+        }).then(function (body) {
+            if (body.errors.length < 1) {
                 place.removeChild(parentDiv)
             }
         })
     }
 
-    
-    
+
+
 })

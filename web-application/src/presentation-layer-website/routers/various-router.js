@@ -5,7 +5,7 @@ module.exports = function(){
 	
 	const router = express.Router()
 
-	router.get("/", function(request, response){
+	router.get("/home", function(request, response){
 		response.render("home.hbs",{isLoggedIn: request.session.account})
 	})
 

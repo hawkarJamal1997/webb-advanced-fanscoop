@@ -1,0 +1,28 @@
+/*** TODO: Put CSS code in separate file. ***/
+    
+/* Code for only showing the page with the class "current-page". */
+main > .page{
+    display: none;
+}
+
+main > .page.current-page{
+    display: block;
+}
+
+.hide{
+    display: none;
+}
+
+/* Code for hiding elements depending on if the user is logged in or not. */
+.is-logged-in .if-is-logged-out{
+    display: none;
+}
+
+.is-logged-out .if-is-logged-in{
+    display: none;
+}
+
+
+input:valid {
+    border: 2px solid black;
+}
