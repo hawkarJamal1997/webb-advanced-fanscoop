@@ -13,10 +13,12 @@ exports.getErrorsNewClub = function(club){
 	// Validate name.
 	if(!club.hasOwnProperty("name")){
 		errors.push("nameMissing")
-	}else if(club.name.length < LIMIT.MIN_TITLE_LENGTH){
+	}else if(club.name && club.name.length < LIMIT.MIN_TITLE_LENGTH){
 		errors.push("clubNameTooShort")
-	}else if(LIMIT.MAX_TITLE_LENGTH < club.name.length){
+	}else if(club.name && LIMIT.MAX_TITLE_LENGTH < club.name.length){
 		errors.push("clubNameTooLong")
+	} else if(!club.image) {
+		errors.push("clubNoImage")
 	}
 	
 	return errors

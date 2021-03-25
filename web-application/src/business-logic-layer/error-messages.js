@@ -15,6 +15,7 @@ module.exports = {
         usernameInvalidCharacters: "Username can't have special characters!",
         passwordIncorrect: "Password is wrong, try again!",
         notRightUser: "You are not the user of this post!",
+        clubNoImage: "You need to provide a club image!",
         clubNameTooShort: "The name of the Club must be longer than "+LIMIT.MIN_CLUBNAME_LENGTH+" characters.",
         clubNameTooLong: "The name of the Club must be shorter than "+LIMIT.MAX_CLUBNAME_LENGTH+" characters.",
         clubExists: "A club with this name has already been made.",

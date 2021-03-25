@@ -95,7 +95,7 @@ module.exports = function({accountManager}){
 			if(error) {
 				return console.log(error);
 			}
-			response.redirect("/")
+			response.redirect("/home")
 		})
 	})
 
