@@ -37,9 +37,6 @@ INSERT INTO accounts (username, hashedpassword) VALUES ("bob", "abc123");
 INSERT INTO accounts (username, hashedPassword) VALUES ("admin", "$2b$10$28pWD0GCxURIdck3UVHFZ.9iNHJy1fjQoH0TlrJJ5GOKYARstrTc6");
 -- regular user(username: test, password: test1234)
 INSERT INTO accounts (username, hashedPassword) VALUES ("test", "$2b$10$zN1.ZS.0zP9o03IFkBdGVOOrkuD.TZF0lAi0LW2dbJlbNvi/i2S8q");
-INSERT INTO clubs (name) VALUES ("Milan");
-INSERT INTO clubs (name) VALUES ("Manchester City");
-INSERT INTO clubs (name) VALUES ("Chelsea");
 INSERT INTO posts (title, content, club, userOfPost) VALUES ("milan test", "milan content", "Milan", "hawkar");
 INSERT INTO posts (title, content, club, userOfPost) VALUES ("milan test 2", "milan content", "Milan", "bob");
 INSERT INTO posts (title, content, club, userOfPost) VALUES ("che test", "ch content", "Chelsea", "hawkar");

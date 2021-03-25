@@ -48,9 +48,8 @@ module.exports = function(){
 		Success value: The id of the new club.
 	*/
 	exports.createClub = function(club, callback){
-		
 		const query = `INSERT INTO clubs (name, clubImage) VALUES (?, ?)`
-		const values = [club.name, club.clubImage]
+		const values = [club.name, club.image]
 		
 		db.query(query, values, function(error, results){
 			if(error){
