@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS accounts (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(50) NOT NULL,
-	hashedPassword VARCHAR(255) NOT NULL,
+	password VARCHAR(255) NOT NULL,
 	CONSTRAINT usernameUnique UNIQUE (username)
 );
 
@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS posts (
 	content TEXT NOT NULL,
 	club VARCHAR(50) NOT NULL,
 	userOfPost VARCHAR(50) NOT NULL,
+	dateCreated DATE NOT NULL,
 	FOREIGN KEY (club) REFERENCES clubs(name),
 	FOREIGN KEY (userOfPost) REFERENCES accounts(username),
 	CONSTRAINT titleUnique UNIQUE (title)
@@ -29,14 +30,11 @@ CREATE TABLE IF NOT EXISTS posts (
 
 
 
--- Create a dummy account for testing.
-INSERT INTO accounts (username, hashedpassword) VALUES ("Alice", "abc123");
-INSERT INTO accounts (username, hashedpassword) VALUES ("hawkar", "abc123");
-INSERT INTO accounts (username, hashedpassword) VALUES ("bob", "abc123");
 -- admin details(username: admin, password: admin123)
-INSERT INTO accounts (username, hashedPassword) VALUES ("admin", "$2b$10$28pWD0GCxURIdck3UVHFZ.9iNHJy1fjQoH0TlrJJ5GOKYARstrTc6");
--- regular user(username: test, password: test1234)
-INSERT INTO accounts (username, hashedPassword) VALUES ("test", "$2b$10$zN1.ZS.0zP9o03IFkBdGVOOrkuD.TZF0lAi0LW2dbJlbNvi/i2S8q");
-INSERT INTO posts (title, content, club, userOfPost) VALUES ("milan test", "milan content", "Milan", "hawkar");
-INSERT INTO posts (title, content, club, userOfPost) VALUES ("milan test 2", "milan content", "Milan", "bob");
-INSERT INTO posts (title, content, club, userOfPost) VALUES ("che test", "ch content", "Chelsea", "hawkar");
+INSERT INTO accounts (username, password) VALUES ("admin", "$2b$10$28pWD0GCxURIdck3UVHFZ.9iNHJy1fjQoH0TlrJJ5GOKYARstrTc6");
+INSERT INTO clubs (name, clubImage) VALUES ("Milan", "83561628-9a5b-4403-b803-ab913d3e1d0cMilan.svg.png");
+INSERT INTO clubs (name, clubImage) VALUES ("Chelsea", "9aed450a-6031-4474-b4a2-050842c4b62f1582130722485.png");
+INSERT INTO clubs (name, clubImage) VALUES ("Manchester City", "d993ece6-34cd-44ff-91fc-06d549d8a318.png");
+INSERT INTO posts (title, content, club, dateCreated, userOfPost) VALUES ("milan test", "milan content", "Milan", "2021-01-01", "admin");
+INSERT INTO posts (title, content, club, dateCreated, userOfPost) VALUES ("milan test 2", "milan content", "Milan", "2021-03-27", "admin");
+INSERT INTO posts (title, content, club, dateCreated, userOfPost) VALUES ("che test", "ch content", "Manchester City", "2021-08-06", "admin");

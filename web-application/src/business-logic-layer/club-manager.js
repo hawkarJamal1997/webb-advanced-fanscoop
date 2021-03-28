@@ -1,31 +1,29 @@
 const clubValidator = require('./club-validator')
 
-module.exports = function({clubRepository}){
+module.exports = function({ clubRepository }) {
 
-	const exports = {}
+    const exports = {}
 
-	exports.getAllClubs = function(callback){
-		clubRepository.getAllClubs(callback)
-	}
-	
-	exports.createClub = function(club, callback){
-		
-		// Validate the club.
-		const errors = clubValidator.getErrorsNewClub(club)
+    exports.getAllClubs = function(callback) {
+        clubRepository.getAllClubs(callback)
+    }
 
-		if(0 < errors.length){
-			callback(errors, null)
-			return
-		}
-		clubRepository.createClub(club, callback)
-		
-	}
-	
-	exports.getClubByName = function(name, callback){
-		clubRepository.getClubByName(name, callback)
-	}
+    exports.createClub = function(club, callback) {
 
+        // Validate the club.
+        const errors = clubValidator.getErrorsNewClub(club)
 
-	return exports
+        if (0 < errors.length) {
+            callback(errors, null)
+            return
+        }
+        clubRepository.createClub(club, callback)
+
+    }
+
+    exports.getClubByName = function(name, callback) {
+        clubRepository.getClubByName(name, callback)
+    }
+
+    return exports
 }
-

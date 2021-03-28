@@ -12,12 +12,7 @@
 <body>
     <nav class="navbar is-info" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="/home"><strong>FanScoop</strong></a>
-            <a role="button" class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                </a>
+            <a class="navbar-item" href="/"><strong>FanScoop</strong></a>
         </div>
         <div class="navbar-menu">
             <div class="navbar-start">
@@ -30,10 +25,10 @@
                 <div class="navbar-item">
                     <div class="buttons">
                         {{#if isLoggedIn}}
-                            <form action="/accounts/logout" method="POST">
-                                <input class="button is-success" type="submit" value="Logout">
-                            </form>
-						{{else}}
+                        <form action="/accounts/logout" method="POST">
+                            <input class="button is-danger" type="submit" value="Logout">
+                        </form>
+                        {{else}}
                         <a href="/accounts/sign-up" class="button is-dark">Sign up</a>
                         <a href="/accounts/sign-in" class="button is-light">Sign in</a>
                         {{/if}}
@@ -41,6 +36,23 @@
                 </div>
             </div>
         </div>
+        <input class="burger-check" id="burger-check" type="checkbox"><label for="burger-check" class="burger"></label>
+        <nav id="navigation1" class="navigation">
+            <ul>
+                <li><a href="/accounts" class="navbar-item">Accounts</a></li>
+                <li><a href="/clubs" class="navbar-item">Clubs</a></li>
+                <li><a href="/contact" class="navbar-item">Contact</a></li>
+                <li><a href="/about" class="navbar-item">About</a></li>
+                {{#if isLoggedIn}}
+                <form action="/accounts/logout" method="POST">
+                    <input class="button is-success" type="submit" value="Logout">
+                </form>
+                {{else}}
+                <a href="/accounts/sign-up" class="button is-dark">Sign up</a>
+                <a href="/accounts/sign-in" class="button is-light">Sign in</a>
+                {{/if}}
+            </ul>
+        </nav>
     </nav>
 
     <main>{{{body}}}</main>
@@ -48,8 +60,8 @@
     <footer>
         <a href="/about">About</a>
         <a href="/contact">Contact</span></a>
-        {{session}}
     </footer>
 
 </body>
+
 </html>

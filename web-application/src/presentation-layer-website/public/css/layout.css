@@ -1,41 +1,148 @@
-html{
+html {
     height: 100%;
 }
 
-body{
-	background-color:whitesmoke;
-	min-height: 100%;
+body {
+    background-color: whitesmoke;
+    min-height: 100%;
 }
 
-.container{
+.container {
     background-image: url("home-background.jpg");
 }
 
-div .card{
+div .card {
     margin-top: 10px;
-    margin-left: 250px;
-    margin-right: 250px;
+    margin-left: 100px;
+    margin-right: 100px;
 }
 
-#showAll{
-    height: 125px;
+#showAll {
+    height: fit-content;
     overflow: hidden;
 }
 
-main{
+main {
     padding: 8px;
     text-align: center;
 }
 
-label{
+#burger-check {
+    display: none;
+}
+
+nav .navigation {
+    display: none;
+}
+
+#error-text {
+    color: red;
+}
+
+#successfull {
+    color: green;
+}
+
+label {
     text-align: start;
 }
 
-ul{
+ul {
     display: inline-block;
 }
 
-footer{
+@media only screen and (max-width: 1023px) {
+    .burger {
+        display: inline-block;
+        border: 0;
+        background: none;
+        outline: 0;
+        padding: 0;
+        cursor: pointer;
+        border-bottom: 4px solid currentColor;
+        width: 28px;
+        transition: border-bottom 1s ease-in-out;
+        -webkit-transition: border-bottom 1s ease-in-out;
+    }
+    .burger::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
+    .burger:before {
+        content: "";
+        display: block;
+        border-bottom: 4px solid currentColor;
+        width: 100%;
+        margin-bottom: 5px;
+        transition: transform 0.5s ease-in-out;
+        -webkit-transition: -webkit-transform 0.5s ease-in-out;
+    }
+    .burger:after {
+        content: "";
+        display: block;
+        border-bottom: 4px solid currentColor;
+        width: 100%;
+        margin-bottom: 5px;
+        transition: transform 0.5s ease-in-out;
+        -webkit-transition: -webkit-transform 0.5s ease-in-out;
+    }
+    .burger-check {
+        display: none;
+    }
+    .burger-check:checked~.burger {
+        border-bottom: 4px solid transparent;
+        transition: border-bottom 0.8s ease-in-out;
+        -webkit-transition: border-bottom 0.8s ease-in-out;
+    }
+    .burger-check:checked~.burger:before {
+        transform: rotate(-405deg) translateY(1px) translateX(-3px);
+        -webkit-transform: rotate(-405deg) translateY(1px) translateX(-3px);
+        transition: transform 0.5s ease-in-out;
+        -webkit-transition: -webkit-transform 0.5s ease-in-out;
+    }
+    .burger-check:checked~.burger:after {
+        transform: rotate(405deg) translateY(-4px) translateX(-5px);
+        -webkit-transform: rotate(405deg) translateY(-4px) translateX(-5px);
+        transition: transform 0.5s ease-in-out;
+        -webkit-transition: -webkit-transform 0.5s ease-in-out;
+    }
+    .navigation {
+        overflow: hidden;
+        max-height: 100px;
+        transition: max-height 0.5s ease-in-out;
+    }
+    .burger-check:checked~.navigation {
+        display: block;
+        max-height: 500px;
+        transition: max-height 0.5s ease-in-out;
+    }
+    body {
+        text-align: centeR;
+    }
+    a {
+        color: inherit;
+    }
+    small {
+        font-size: 14px;
+    }
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+    li {
+        list-style: none;
+        font-size: 25px;
+        padding: 5px 0;
+    }
+    li a {
+        text-decoration: none;
+    }
+    li a:hover {
+        text-decoration: underline;
+    }
+}
+
+footer {
     position: fixed;
     bottom: 0px;
     width: 100%;

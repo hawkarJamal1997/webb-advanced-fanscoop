@@ -1,59 +1,46 @@
-async function signIn() {
-    
-    document.getElementById("sign-in-form").addEventListener("submit", async function(event){
-        console.log("whahaat")
-                    
-        event.preventDefault()
+document.addEventListener("DOMContentLoaded", function() {
 
-        const username = document.getElementById("username").value
-        const password = document.getElementById("password").value
+    const signInForm = document.getElementById("sign-in-form")
+    const errorSection = document.getElementById("errorSection")
 
-        // TODO: Can add client-side validation here.
+    signInForm.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const username = document.getElementsByName("username")[1].value
+        const password = document.getElementsByName("password")[1].value
 
         const data = {
             username,
             password,
             grant_type: "password"
         }
-        const headers = {
-            "Content-Type": "application/x-www-form-urlencoded"
+
+        const response = await loginPost("api/accounts/sign-in", data)
+
+        if (response.errors) {
+            HandleErrors(response.errors, errorSection)
+            signInForm.appendChild(errorSection)
+            return;
+        } else {
+
+            const signUpButton = document.getElementById("is-sign-up")
+            signUpButton.classList.remove("is-sign-up")
+            signUpButton.classList.add("is-logged-in")
+
+            const signInButton = document.getElementById("is-sign-in")
+            signInButton.classList.remove("is-sign-in")
+            signInButton.classList.add("is-logged-in")
+
+            const logoutButton = document.getElementById("is-logout")
+            logoutButton.classList.remove("is-logout")
+            logoutButton.classList.add("show-logout")
+
+            localStorage.setItem("accessToken", response.access_token)
+            localStorage.setItem("idToken", response.id_token.username)
+
+            const uri = "/"
+            newPage(uri)
         }
-
-        const response = await fetch(`api/${BACKEND_URI}/accounts/sign-up`,{
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body = new URLSearchParams(data)
-        })
-
-        switch(response.status){
-            
-            case 200:
-                
-                const body = await response.json()
-                
-                accessToken = body.access_token
-                
-                document.body.classList.remove("is-logged-out")
-                document.body.classList.add("is-logged-in")
-                
-                console.log(accessToken)
-                // TODO: Show feedback to the user (did the login succeed?).
-                
-            break
-            case 400:
-                
-                // TODO.
-                
-            break
-            case 500:
-            default:
-                
-                // TODO.
-            
-        }
-
     })
-    
-}    
+})

@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes, UniqueConstraintError, Model } = require('sequelize')
+const { Sequelize, DataTypes, UniqueConstraintError } = require('sequelize')
 
 const sequelize = new Sequelize('sqlite::memory:')
 
@@ -14,16 +14,20 @@ const Account = sequelize.define('Account', {
     timestamps: false
 })
 
-sequelize.sync({ force: true })
+sequelize.sync({ force: true }).then(() => {
 
-module.exports = function(){
+    //username= "admin, password = "admin123"
+    return Account.create({ username: "admin", password: "$2b$10$jJR8txhaCVmAztUQwFYqe.NHsfGM8kF/hP0uZYAgbESMGx0X/OWyy" });
+})
+
+module.exports = function() {
 
     /*
     Retrieves all accounts ordered by username.
     Possible errors: internalError
     Success value: The fetched accounts in an array.
     */
-    exports.getAllAccounts = function (callback){
+    exports.getAllAccounts = function(callback) {
 
         Account.findAll({ raw: true })
             .then(accounts => callback([], accounts))
@@ -36,9 +40,9 @@ module.exports = function(){
         Possible errors: internalError
         Success value: The fetched account, or null if no account has that username.
     */
-    exports.getAccountByUsername = function (username, callback){
+    exports.getAccountById = function(id, callback) {
 
-        Account.findOne({ where: { username }, raw: true })
+        Account.findOne({ where: { id }, raw: true })
             .then(account => callback([], account))
             .catch(error => callback(['internalError'], null))
 
@@ -48,14 +52,14 @@ module.exports = function(){
         Creates a new account.
         account: {username: "The username", password: "The password"}
         Possible errors: internalError, usernameTaken
-        Success value: The username of the new account.
+        Success value: The the new account.
     */
-    exports.createAccount = function (account, callback){
+    exports.createAccount = function(account, callback) {
 
-        Account.create({ username: account.username, hashedPassword: account.password, userOfPost: account.userOfPost })
+        Account.create({ username: account.username, password: account.password })
             .then(account => callback([], account))
             .catch(error => {
-                if (error instanceof UniqueConstraintError){
+                if (error instanceof UniqueConstraintError) {
                     callback(['usernameTaken'], null)
                 } else {
                     callback(['internalError'], null)
@@ -69,14 +73,11 @@ module.exports = function(){
         Possible errors: internalError
         Success value: The users account.
     */
-    exports.signInAccount = function (account, callback){
-        
-        Account.findOne({ where: {username: account.username}, raw: true })
-            .then(account => {
-                callback([], account)
-            })
-            .catch(error => callback(['internalError'], null))
+    exports.signInAccount = function(account, callback) {
 
+        Account.findOne({ where: { username: account.username }, raw: true })
+            .then(account => callback([], account))
+            .catch(error => callback(['internalError'], null))
     }
 
     return exports

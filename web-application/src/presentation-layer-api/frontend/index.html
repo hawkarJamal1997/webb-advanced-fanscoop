@@ -1,224 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
-    <link rel="stylesheet" href="/css/layout.css">
-	<link rel="stylesheet" href="./layout.css">
-	<title>Fanscoop</title>
 
-	<script src="http-methods.js"></script>
-	<script src="club.js"></script>
-	<script src="posts.js"></script>
-	<script src="sign-in.js"></script>
-	<script src="page-conf.js"></script>
-	<script>
-		const d = document.getElementById("login-form")
-		console.log(d)
-		  document.getElementById("login-form").addEventListener("submit", async function(event){
-            console.log("whahaat")
-                        
-            event.preventDefault()
-    
-            const username = document.getElementById("username").value
-            const password = document.getElementById("password").value
-    
-            // TODO: Can add client-side validation here.
-    
-            const data = {
-                username,
-                password,
-                grant_type: "password"
-            }
-            const headers = {
-                "Content-Type": "application/x-www-form-urlencoded"
-            }
-    
-            const response = await fetch(`api/${BACKEND_URI}/accounts/sign-up`,{
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body = new URLSearchParams(data)
-            })
-    
-            switch(response.status){
-                
-                case 200:
-                    
-                    const body = await response.json()
-                    
-                    accessToken = body.access_token
-                    
-                    document.body.classList.remove("is-logged-out")
-                    document.body.classList.add("is-logged-in")
-                    
-                    console.log(accessToken)
-                    // TODO: Show feedback to the user (did the login succeed?).
-                    
-                break
-                case 400:
-                    
-                    // TODO.
-                    
-                break
-                case 500:
-                default:
-                    
-                    // TODO.
-                
-            }
-    
-            })
-	</script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="./public/css/layout.css">
+    <title>Fanscoop</title>
+
+    <script src="http-helper.js"></script>
+    <script src="club.js"></script>
+    <script src="show-all-posts.js"></script>
+    <script src="create-post.js"></script>
+    <script src="edit-post.js"></script>
+    <script src="sign-in.js"></script>
+    <script src="sign-up.js"></script>
+    <script src="logout.js"></script>
+    <script src="page-conf.js"></script>
 </head>
-<body class="is-logged-in">
-	<nav class="navbar is-info" role="navigation" aria-label="main navigation">
+
+<body>
+    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/"><strong>FanScoop</strong></a>
             <a role="button" class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
-                </a>
+            </a>
         </div>
         <div class="navbar-menu">
             <div class="navbar-start">
-                <a href="/accounts" class="navbar-item">Accounts</a>
                 <a href="/clubs" class="navbar-item">Clubs</a>
                 <a href="/about" class="navbar-item">About</a>
             </div>
             <div class="navbar-end">
                 <div class="navbar-item">
-                    <div class="buttons">
-                            <form action="" method="POST">
-                                <input class="button is-success" type="submit" value="Logout">
-                            </form>
+                    <a href="/sign-up" class="button is-dark" id="is-sign-up">Sign up</a>
+                    <a href="/sign-in" class="button is-light" id="is-sign-in">Sign in</a>
+                    <form action="" id="logout-button">
+                        <input class="button is-danger" type="submit" value="Logout" id="is-logout">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+
+        <div class="page" id="home-page">
+            <h1 class="is-size-1">Speak your mind <em>fans</em></h1>
+            <div class="container">
+                <div class="card">
+                    <div class="card-image">
+                        <figure class="image is-5by3">
+                            <img src="./public/home-background.jpg" alt="home page background">
+                        </figure>
                     </div>
                 </div>
             </div>
         </div>
-    </nav>
-</body>
-<body class="is-logged-out">
-	
-	<nav class="navbar is-info" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="/"><strong>FanScoop</strong></a>
-            <a role="button" class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                </a>
+
+        <div class="page" id="about-page">
+            <h1>About</h1>
+            <p>The about page...</p>
         </div>
-        <div class="navbar-menu">
-            <div class="navbar-start">
-                <a href="/accounts" class="navbar-item">Accounts</a>
-                <a href="/clubs" class="navbar-item">Clubs</a>
-                <a href="/about" class="navbar-item">About</a>
-            </div>
-            <div class="navbar-end">
-                <div class="navbar-item">
-					
-                        <a href="/sign-up" class="button is-dark">Sign up</a>
-                        <a href="/sign-in" class="button is-light">Sign in</a>
-                      
+
+        <div class="page" id="clubs-page"></div>
+
+        <div class="page" id="club-posts-page"></div>
+
+        <div class="page" id="create-post-page">
+            <h1>Create</h1>
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-7-desktop is-10-mobile is-5-widescreen">
+                        <form class="box" id="create-post-form">
+                            <div class="field">
+                                <label class="label">Title:</label>
+                                <input type="text" class="input" id="title" required minlength="3" maxlength="30">
+                            </div>
+                            <div class="field">
+                                <label class="label">Content:</label>
+                                <textarea class="textarea" id="content" rows="5" required minlength="5" maxlength="200"></textarea>
+                            </div>
+                            <input class="button is-success" type="submit" value="Create post">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </nav>
-	
-	<main>
-		
-		<div class="page" id="home-page">
-			<h1>Home</h1>
-			<p>Welcome to this site!</p>
-			<p>Go to <a href="/about">About page</a>.</p>
-		</div>
-		
-		<div class="page" id="about-page">
-			<h1>About</h1>
-			<p>The about page...</p>
-		</div>
 
-		<div class="page" id="clubs-page"></div>
-		
-		<div class="page" id="club-posts-page"></div>
-		
-		<div class="page" id="create-post-page">
-			<h1>Create</h1>
-			<div class="container">
-				<div class="columns is-centered">
-					<div class="column is-7-desktop is-10-mobile is-5-widescreen">
-						<form action="" id="create-post-form">
-							<div class="field">
-								<label class="label">Title:</label>
-								<input type="text" class="input" name="title" required minlength="3" maxlength="30">
-							</div>
-							<div class="field">
-								<label class="label">Content:</label>
-								<textarea class="textarea" name="content" rows="5" required minlength="5" maxlength="200"></textarea>
-							</div>
-							<input class="button is-success" type="submit" value="Create">
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="page" id="sign-up-page">
-			<h1>Sign up</h1>
-			<div class="container">
-				<div class="columns is-centered">
-					<div class="column is-7-desktop is-12-mobile is-7-tablet is-7-widescreen">
-						<form action="" class="box" id="sign-up-form">
-							<div class="field">
-								<label class="label">Username:</label>
-								<input type="text" class="input" name="username" required minlength="5" maxlength="15">
-							</div>
-							<div class="field">
-								<label class="label">Password:</label>
-								<input type="password" class="input" name="password" required minlength="7" maxlength="30">
-							</div>
-							<div>
-								<input class="button is-success" type="submit" value="Create account">
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
+        <div class="page" id="edit-post-page">
+            <h1>Edit post</h1>
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-7-desktop is-10-mobile is-5-widescreen">
+                        <form class="box" id="edit-post-form">
+                            <div class="field">
+                                <label class="label">Title:</label>
+                                <input type="text" class="input" id="editTitle" required minlength="3" maxlength="30">
+                            </div>
+                            <div class="field">
+                                <label class="label">Content:</label>
+                                <textarea class="textarea" id="editContent" rows="5" required minlength="5" maxlength="200"></textarea>
+                            </div>
+                            <input class="button is-success" type="submit" value="update post">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		<div class="page" id="sign-in-page">
-			<h1>Sign in</h1>
-			<div class="container">
-				<div class="columns is-centered">
-					<div class="column is-7-desktop is-12-mobile is-7-tablet is-7-widescreen">
-						<form class="box" id="login-form" >
-							<div class="field">
-								<label class="label">Username:</label>
-								<input type="text" class="input" name="username">
-							</div>
-							<div class="field">
-								<label class="label">Password:</label>
-								<input type="password" class="input" name="password">
-							</div>
-							<div>
-								<input class="button is-success" type="submit" value="Login">
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="page" id="not-found-page">
-			<h1>Not Found</h1>
-		</div>
-		
-	</main>
-	
+        <div class="page" id="sign-up-page">
+            <h1>Sign up</h1>
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-7-desktop is-12-mobile is-7-tablet is-7-widescreen">
+                        <form class="box" id="sign-up-form">
+                            <div class="field">
+                                <label class="label">Username:</label>
+                                <input type="text" class="input" name="username" required minlength="5" maxlength="15">
+                            </div>
+                            <div class="field">
+                                <label class="label">Password:</label>
+                                <input type="password" class="input" name="password" required minlength="7" maxlength="30">
+                            </div>
+                            <div>
+                                <input class="button is-success" type="submit" value="Create account">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="sign-in-page">
+            <h1>Sign in</h1>
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-7-desktop is-12-mobile is-7-tablet is-7-widescreen">
+                        <form class="box" id="sign-in-form">
+                            <div class="field">
+                                <label class="label">Username:</label>
+                                <input type="text" class="input" name="username" required>
+                            </div>
+                            <div class="field">
+                                <label class="label">Password:</label>
+                                <input type="password" class="input" name="password" required>
+                            </div>
+                            <div>
+                                <input class="button is-success" type="submit" value="Login">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="not-found-page">
+            <h1>Not Found</h1>
+        </div>
+
+        <div id="errorSection"></div>
+
+    </main>
+
 </body>
+
 </html>

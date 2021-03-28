@@ -1,18 +1,17 @@
 <div class="content">
 	<h2>Sign in</h2>
 	<p>Sign in using the form below.</p>
-	{{#if errors.length}}
-	<p>Fix the errors</p>
-	<ul>
-		{{#each errors}}
-		<li>{{this}}</li>
-		{{/each}}
-	</ul>
-	{{/if}}
 	<div class="container">
 		<div class="columns is-centered">
 			<div class="column is-7-desktop is-12-mobile is-7-tablet is-7-widescreen">
 				<form action="/accounts/sign-in" method="POST" class="box">
+					{{#if errors.length}}
+						<ul>
+							{{#each errors}}
+							<li id="error-text">{{this}}</li>
+							{{/each}}
+						</ul>
+					{{/if}}
 					<div class="field">
 						<label class="label">Username:</label>
 						<input type="text" class="input" name="username" value="{{username}}">

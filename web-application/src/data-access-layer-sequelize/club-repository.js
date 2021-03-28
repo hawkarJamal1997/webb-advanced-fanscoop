@@ -2,27 +2,33 @@ const { Sequelize, DataTypes, UniqueConstraintError } = require('sequelize')
 
 const sequelize = new Sequelize('sqlite::memory:')
 
-const Club = sequelize.define('club', {
+const Club = sequelize.define('Club', {
     name: {
         type: DataTypes.STRING,
         unique: true
+    },
+    clubImage: {
+        type: DataTypes.STRING
     }
 }, {
     timestamps: false
 })
 
-sequelize.sync({ force: true })
+sequelize.sync({ force: true }).then(() => {
+    
+    return Club.create({name: "Milan", clubImage: "83561628-9a5b-4403-b803-ab913d3e1d0cMilan.svg.png"})
+})
 
-module.exports = function(){
+module.exports = function() {
 
     /*
     Retrieves all clubs ordered by name.
     Possible errors: internalError
     Success value: The fetched clubs in an array.
     */
-    exports.getAllClubs = function (callback){
+    exports.getAllClubs = function(callback) {
 
-        club.findAll({ raw: true })
+        Club.findAll({ raw: true })
             .then(clubs => callback([], clubs))
             .catch(error => callback(['internalError'], null))
 
@@ -33,9 +39,9 @@ module.exports = function(){
         Possible errors: internalError
         Success value: The fetched club, or null if no club has that name.
     */
-    exports.getClubByName = function (name, callback){
+    exports.getClubByName = function(name, callback) {
 
-        club.findOne({ where: { name }, raw: true })
+        Club.findOne({ where: { name }, raw: true })
             .then(club => callback([], club))
             .catch(error => callback(['internalError'], null))
 
@@ -43,24 +49,24 @@ module.exports = function(){
 
     /*
         Creates a new club.
-        club: {name: "The name of the club"}
+        club: {name: "The name of the club", clubImage: "The url of the image"}
         Possible errors: internalError, clubExists
         Success value: The id of the new club.
     */
-    exports.createClub = function (club, callback){
+    exports.createClub = function(club, callback) {
 
-        club.create(club)
-            .then(club => callback([], club.id))
-            .then(error => {
-                if (error instanceof UniqueConstraintError){
-                    callback(['clubExists'], null)
-                } else {
-                    callback(['internalError'], null)
-                }
-            })
-
+        Club.create({name: club.name, clubImage: club.image})
+            .then(club => callback([]))    
+            .catch(error => {
+                    if (error instanceof UniqueConstraintError) {
+                        callback(['clubExists'])
+                    } else{
+                        callback(['internalError'])
+                    }
+                })
+            
     }
-    
+
     return exports
-    
+
 }
