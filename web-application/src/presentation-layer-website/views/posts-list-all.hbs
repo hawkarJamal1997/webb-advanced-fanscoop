@@ -14,9 +14,10 @@
 
 	{{#if posts.length}}
 		{{#each posts}}
-		<a href="/posts/{{club}}/{{title}}">
+		<a href="/posts/{{club}}/{{id}}">
 			<div class="card">
 				<div class="card-content" id="showAll">
+					<p>Created at: {{dateCreated}}</p>
 					<p class="title">{{title}}</p>
 					<p class="subtitle">{{content}}</p>
 				</div>

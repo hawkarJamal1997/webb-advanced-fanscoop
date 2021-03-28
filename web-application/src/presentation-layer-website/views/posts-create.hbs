@@ -1,17 +1,17 @@
 <div class="content">
     <h2> Create blog post about {{club}} </h2>
     <p>Create a new blog post for {{club}} using the form below.</p>
-    {{#if errors.length}}
-    <ul>
-        {{#each errors}}
-        <li>{{this}}</li>
-        {{/each}}
-    </ul>
-    {{/if}}
     <div class="container">
-        <div class="columns is-centered">
+        <div class="columns is-centered"> 
             <div class="column is-7-desktop is-10-mobile is-5-widescreen">
                 <form action="/posts/create/{{club}}" method="POST" class="box">
+                    {{#if errors.length}}
+                        <ul>
+                            {{#each errors}}
+                            <li id="error-text">{{this}}</li>
+                            {{/each}}
+                        </ul>
+                    {{/if}}
                     <div class="field">
                         <label class="label">Title:</label>
                         <input type="text" class="input" name="title" value="{{title}}">
@@ -22,7 +22,12 @@
                     </div>
                     <input type="hidden" name="club" value="{{club}}"
                     <div>
-                        <input class="button is-success" type="submit" value="Create post">
+                        {{#if isLoggedIn}}
+                            <input class="button is-success" type="submit" value="Create post">
+                        {{else}}
+                            <p class="subtitle" id="error-text">You need to sign in to create a post!</p>
+                        {{/if}}
+
                     </div>
                 </form>
             </div>

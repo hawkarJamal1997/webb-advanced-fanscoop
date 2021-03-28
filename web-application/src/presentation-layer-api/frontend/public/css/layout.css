@@ -1,0 +1,99 @@
+html {
+    height: 100%;
+}
+
+body {
+    background-color: whitesmoke;
+    min-height: 100%;
+}
+
+.container {
+    background-image: url("home-background.jpg");
+}
+
+div .card {
+    margin-top: 10px;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+#showAll {
+    height: fit-content;
+    overflow: hidden;
+}
+
+main {
+    padding: 8px;
+    text-align: center;
+}
+
+#error-text {
+    color: red;
+}
+
+#successfull {
+    color: green;
+}
+
+label {
+    text-align: start;
+}
+
+ul {
+    display: inline-block;
+}
+
+
+/* Code for only showing the page with the class "current-page". */
+
+main>.page {
+    display: none;
+}
+
+main>.page.current-page {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+
+/* Code for hiding elements depending on if the user is logged in or not. */
+
+#is-sign-up {
+    display: block;
+}
+
+#is-sign-in {
+    display: block;
+}
+
+#is-logout {
+    display: none;
+}
+
+.is-logged-in {
+    display: none !important;
+}
+
+.show-logout {
+    display: block !important;
+}
+
+input:valid {
+    border: 2px solid black;
+}
+
+.invalid {
+    color: red;
+}
+
+footer {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+    opacity: 0.9;
+    background-color: #363636;
+}
